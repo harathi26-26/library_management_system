@@ -38,7 +38,7 @@ export default function IssueHistory() {
 
   return (
     <div className="issue-history">
-      <h3>📕 Issue History</h3>
+      <h3>📕 ISSUE HISTORY</h3>
 
       {loading && <p>Loading...</p>}
 

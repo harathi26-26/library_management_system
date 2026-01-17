@@ -26,7 +26,7 @@ export default function BookForm() {
   return (
     <form>
       <div className="form-title">
-        <h3>➕ Add New Book</h3>
+        <h3>➕ ADD NEW BOOK</h3>
       </div>
 
       {/* Book Title */}

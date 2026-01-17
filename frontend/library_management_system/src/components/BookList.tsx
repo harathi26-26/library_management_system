@@ -61,7 +61,7 @@ export default function BookList({ onEdit, refreshKey }: Props) {
 
   return (
     <div className="book-list">
-      <h2>📚 Book List</h2>
+      <h2>📚 BOOK LIST</h2>
 
       {/* 🔍 Search + Filter + Sort */}
       <div className="filter-bar">
@@ -112,8 +112,8 @@ export default function BookList({ onEdit, refreshKey }: Props) {
             </div>
 
             <div className="action-buttons">
-              <button className="btn btn-edit"onClick={() => onEdit(b)}>✏️ Edit</button>
-              <button className="btn btn-delete" onClick={() => handleDelete(b.id)}>❌ Delete</button>
+              <button type="button" className="btn-edit"onClick={() => onEdit(b)}>✏️ Edit</button>
+              <button type="button" className="btn-delete" onClick={() => handleDelete(b.id)}>❌ Delete</button>
             </div>
           </li>
         ))}

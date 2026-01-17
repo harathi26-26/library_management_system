@@ -11,39 +11,52 @@ export default function Home() {
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [refreshBooks, setRefreshBooks] = useState(0);
 
-  const triggerRefresh = () => 
-    setRefreshBooks((prev) => prev+1);
+  const triggerRefresh = () =>
+    setRefreshBooks((prev) => prev + 1);
+
   const clearEdit = () => {
     setEditingBook(null);
     triggerRefresh();
   };
 
-
   return (
     <div className="container">
-      {/* 🔹 Top section: Add + Issue side by side */}
+
+      {/* ADD BOOK + ISSUE BOOK */}
       <div className="two-column">
-        <BookForm onAdded={triggerRefresh}/>
-        <IssueForm />
+        <div className="card">
+          <BookForm onAdded={triggerRefresh} />
+        </div>
+
+        <div className="card">
+          <IssueForm />
+        </div>
       </div>
 
-      {/* 🔹 Update section */}
+      {/* EDIT BOOK */}
       {editingBook && (
-        <div className="section-card">
+        <div className="card">
           <UpdateBookForm
             book={editingBook}
-            onCancel={() => setEditingBook(null)}
             onUpdated={clearEdit}
+            onCancel={() => setEditingBook(null)}
           />
         </div>
       )}
 
-      {/* 🔹 Book list */}
-      <BookList onEdit={setEditingBook}
-                refreshKey={refreshBooks} />
+      {/* BOOK LIST */}
+      <div className="card book-list">
+        <BookList
+          refreshKey={refreshBooks}
+          onEdit={(book) => setEditingBook(book)}
+        />
+      </div>
 
-      {/* 🔹 Issue history */}
-      <IssueHistory />
+      {/* ISSUE HISTORY */}
+      <div className="card issue-history">
+        <IssueHistory />
+      </div>
+
     </div>
   );
 }

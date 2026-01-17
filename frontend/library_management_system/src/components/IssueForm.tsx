@@ -26,7 +26,7 @@ export default function IssueForm() {
   return (
     <form>
       <div className="form-title">
-        <h3>📕 Issue Book</h3>
+        <h3>📕 ISSUE BOOK</h3>
       </div>
 
       {/* Book ID */}
