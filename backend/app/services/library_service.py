@@ -15,7 +15,7 @@ def issue_book(db: Session, book_id: int, student_name: str):
     issue = Issue(
         book_id=book_id,
         student_name=student_name,
-        status="Issued"   # 👈 EXPLICIT STATUS
+        status="Issued"   
     )
 
     db.add(issue)
@@ -33,7 +33,7 @@ def return_book(db: Session, issue_id: int):
     if issue.status == "Returned":
         return {"error": "Book already returned"}
 
-    issue.status = "Returned"  # 👈 STATUS CHANGED HERE
+    issue.status = "Returned"  
 
     book = db.query(Book).filter(Book.id == issue.book_id).first()
     book.available_copies += 1
