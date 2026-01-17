@@ -55,7 +55,7 @@ This application allows managing books, issuing and returning books, and trackin
 
 ---
 
-## 📂 Project Structure
+##📂 Project Structure
 library_management_system/
 │
 ├── backend/
@@ -80,7 +80,3 @@ library_management_system/
 │
 └── README.md
 
-
----
-
-##
