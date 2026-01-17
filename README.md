@@ -56,6 +56,8 @@ This application allows managing books, issuing and returning books, and trackin
 ---
 
 ## 📂 Project Structure
+
+```plaintext
 library_management_system/
 │
 ├── backend/
@@ -79,4 +81,3 @@ library_management_system/
 │ └── vite.config.ts
 │
 └── README.md
-
