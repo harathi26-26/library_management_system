@@ -1,0 +1,192 @@
+/* ================= FORMS ================= */
+form {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-group small {
+  font-size: 12px;
+  color: #7f8c8d;
+}
+
+/* Buttons */
+form button {
+  background: #3498db;
+  border: none;
+  padding: 10px 16px;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #7f8c8d;
+}
+
+/* ================= BOOK LIST ================= */
+.book-list {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 30px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Book item */
+ul {
+  list-style: none;
+  margin-top: 12px;
+}
+
+li {
+  background: #ecf0f1;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.book-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.book-id {
+  background: #3498db;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.book-meta {
+  font-size: 13px;
+  color: #555;
+  margin-top: 4px;
+}
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-buttons button:first-child {
+  background: #e8d3a9;
+}
+
+.action-buttons button:last-child {
+  background: #e74c3c;
+}
+
+/* ================= ISSUE HISTORY ================= */
+.issue-history {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.status-issued {
+  color: #e67e22;
+  font-weight: bold;
+}
+
+.status-returned {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.return-btn {
+  background: #0c0110;
+  padding: 6px 10px;
+  border-radius: 4px;
+  color: white;
+}
+/* ================= ACTION BUTTONS ================= */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Base button */
+.action-buttons .btn {
+  border: none;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 999px; /* smooth pill */
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: 
+    background 0.2s ease,
+    transform 0.2s ease,
+}
+
+/* EDIT button */
+.action-buttons .btn-edit {
+  background: linear-gradient(135deg, #fde68a, #facc15);
+  color: #78350f;
+}
+
+/* DELETE button */
+.action-buttons .btn-delete {
+  background: linear-gradient(135deg, #fecaca, #f87171);
+  color: #7f1d1d;
+}
+
+/* Hover */
+.action-buttons .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Active */
+.action-buttons .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
