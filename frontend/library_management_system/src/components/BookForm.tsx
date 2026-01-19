@@ -15,7 +15,7 @@ export default function BookForm({ onAdded }: Props) {
   const [book, setBook] = useState<BookCreate>({
     title: "",
     author: "",
-    available_copies: 1,
+    available_copies: 0,
   });
 
   const [message, setMessage] = useState<Message | null>(null);

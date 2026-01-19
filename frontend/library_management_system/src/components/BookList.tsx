@@ -13,23 +13,20 @@ export default function BookList({ onEdit, refreshKey }: Props) {
   const [available, setAvailable] = useState("");
   const [sortBy, setSortBy] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{
-  type: "success" | "error";
-  text: string;
-} | null>(null);
+  const [message, setMessage] = useState<{type: "success" | "error"; text: string;} | null>(null);
 
   const loadBooks = async () => {
   setLoading(true);
   try {
     const params: Record<string, string> = {};
 
-    // availability filter still backend-side
+    // availability filter 
     if (available !== "") params.available = available;
 
     const res = await getBooks(params);
     let data = res.data;
 
-    // 🔍 FRONTEND SEARCH LOGIC (CONTROLLED)
+    //  FRONTEND SEARCH LOGIC
     if (search.trim()) {
       const q = search.toLowerCase();
 
@@ -44,7 +41,7 @@ export default function BookList({ onEdit, refreshKey }: Props) {
         );
       } 
       else {
-        // default: search both
+        // search both
         data = data.filter(
           (b) =>
             b.title.toLowerCase().includes(q) ||
@@ -53,7 +50,7 @@ export default function BookList({ onEdit, refreshKey }: Props) {
       }
     }
 
-    // 🔃 SORTING
+    // SORTING
     if (sortBy === "title") {
       data = [...data].sort((a, b) =>
         a.title.localeCompare(b.title)
@@ -139,7 +136,7 @@ const handleDelete = async (id: number) => {
           <option value="false">Out of Stock</option>
         </select>
 
-        {/* 🔽 SORT DROPDOWN */}
+        {/* SORT DROPDOWN */}
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}

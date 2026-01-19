@@ -115,7 +115,7 @@ button {
   border-color: #d63031;
 }
 /* issue history of books */
-/* ================= ISSUE HISTORY ================= */
+
 
 .issue-card {
   display: grid;
@@ -167,7 +167,7 @@ button {
 }
 
 
-/* ================= PAGINATION ================= */
+/* pagination */
 
 .pagination {
   display: flex;

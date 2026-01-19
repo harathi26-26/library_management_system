@@ -60,7 +60,7 @@ export default function IssueForm({ onIssued }: Props) {
     setBookId("");
     setStudentName("");
 
-    onIssued(); // ✅ notify parent
+    onIssued(); // notify parent
   };
 
   return (

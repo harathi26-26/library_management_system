@@ -28,14 +28,14 @@ export default function IssueHistory({ refreshKey }: Props) {
     loadIssues();
   }, [refreshKey]);
 
-  /* 🔍 FILTER LOGIC */
+  /*  FILTER LOGIC */
   const filteredIssues = filterBookId
     ? issues.filter(
         (i) => i.book_id === Number(filterBookId)
       )
     : issues;
 
-  /* 📄 PAGINATION LOGIC */
+  /*  PAGINATION LOGIC */
   const totalPages = Math.ceil(
     filteredIssues.length / ITEMS_PER_PAGE
   );
@@ -114,7 +114,7 @@ export default function IssueHistory({ refreshKey }: Props) {
   );
 })}
 
-      {/* 📄 PAGINATION */}
+      {/*  PAGINATION */}
       {totalPages > 1 && (
         <div className="pagination">
           <button
