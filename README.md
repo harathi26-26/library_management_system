@@ -21,7 +21,7 @@ This application allows managing books, issuing and returning books, and trackin
 - Issue books to students
 - Prevent issuing when copies are unavailable
 - Return issued books
-- Track issue history (latest 10 records)
+- Track issue history 
 
 ### 🎨 Frontend
 - React + TypeScript (Vite)
@@ -34,7 +34,6 @@ This application allows managing books, issuing and returning books, and trackin
 - SQLite database
 - SQLAlchemy ORM
 - Pydantic validation
-- Pytest test cases
 
 ---
 

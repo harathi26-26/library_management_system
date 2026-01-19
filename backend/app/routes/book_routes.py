@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from app.core.database import SessionLocal
 from app.models.book import Book
-from app.models.issue import Issue
 from app.schemas.book import BookCreate, BookUpdate, BookResponse
 
 router = APIRouter(prefix="/books", tags=["Books"])
@@ -18,13 +17,6 @@ def get_db():
 # ---------------- CREATE ----------------
 @router.post("/", response_model=BookResponse)
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
-    existing_book = db.query(Book).filter(
-        Book.title.ilike(book.title.strip()),
-        Book.title.ilike(book.title.strip()),
-        Book.author.ilike(book.author.strip())
-    ).first()
-    if existing_book:
-        raise HTTPException(status_code=400, detail="this book already exist in the library")
     new_book = Book(**book.dict())
     db.add(new_book)
     db.commit()
@@ -88,15 +80,6 @@ def delete_book(book_id: int, db: Session = Depends(get_db)):
     book = db.query(Book).filter(Book.id == book_id).first()
     if not book:
         raise HTTPException(status_code=404, detail="Book not found")
-    active_issue = db.query(Issue).filter(
-        Issue.book_id == book_id,
-        Issue.status == "Issued"
-    ).first()
-    if active_issue:
-        raise HTTPException(
-            status_code=400,
-            detail="Book is currently issued and can't be deleted"
-        )
 
     db.delete(book)
     db.commit()
