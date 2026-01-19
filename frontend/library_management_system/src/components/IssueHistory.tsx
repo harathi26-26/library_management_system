@@ -6,7 +6,7 @@ interface Props {
   refreshKey: number;
 }
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 5;
 
 export default function IssueHistory({ refreshKey }: Props) {
   const [issues, setIssues] = useState<Issue[]>([]);
@@ -68,7 +68,7 @@ export default function IssueHistory({ refreshKey }: Props) {
           }}
         />
 
-        <button onClick={handleReset}>Reset</button>
+        <button onClick={handleReset}>RESET</button>
       </div>
 
       {paginatedIssues.length === 0 && (
@@ -121,7 +121,7 @@ export default function IssueHistory({ refreshKey }: Props) {
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
           >
-            Prev
+            PREV
           </button>
 
           <span>
@@ -132,7 +132,7 @@ export default function IssueHistory({ refreshKey }: Props) {
             disabled={page === totalPages}
             onClick={() => setPage((p) => p + 1)}
           >
-            Next
+            NEXT
           </button>
         </div>
       )}

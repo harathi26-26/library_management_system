@@ -174,7 +174,7 @@ const handleDelete = async (id: number) => {
                 className="btn-edit"
                 onClick={() => onEdit(b)}
               >
-                ✏️ EDIT
+                EDIT
               </button>
 
               <button
@@ -182,7 +182,7 @@ const handleDelete = async (id: number) => {
                 className="btn-delete"
                 onClick={() => handleDelete(b.id)}
               >
-                ❌ DELETE
+                 DELETE
               </button>
             </div>
           </li>

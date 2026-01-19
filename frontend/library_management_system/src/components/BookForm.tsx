@@ -25,7 +25,7 @@ export default function BookForm({ onAdded }: Props) {
     e.preventDefault();
     setMessage(null);
 
-    // 🔐 Frontend validation
+    //  Frontend validation
     if (!book.title.trim() || !book.author.trim()) {
       setMessage({
         type: "error",
@@ -39,7 +39,7 @@ export default function BookForm({ onAdded }: Props) {
 
       await createBook(book);
 
-      // ✅ success
+      //  success
       setMessage({
         type: "success",
         text: "Book added successfully.",
@@ -48,7 +48,7 @@ export default function BookForm({ onAdded }: Props) {
       onAdded();
       setBook({ title: "", author: "", available_copies: 1 });
     } catch (err: any) {
-      // ❌ backend errors (duplicate book, etc.)
+      //  backend errors (duplicate book)
       if (err.response?.status === 400) {
         setMessage({
           type: "error",
@@ -77,7 +77,7 @@ export default function BookForm({ onAdded }: Props) {
         <h3>➕ ADD NEW BOOK</h3>
       </div>
 
-      {/* 🔔 Message */}
+      {/*  Message */}
       {message && (
         <div className={`message-box ${message.type}`}>
           {message.text}
@@ -89,7 +89,7 @@ export default function BookForm({ onAdded }: Props) {
         <label>Book Title</label>
         <input
           type="text"
-          placeholder="e.g. Clean Code"
+          placeholder="e.g."
           value={book.title}
           onChange={(e) =>
             updateField({ title: e.target.value })
@@ -102,7 +102,7 @@ export default function BookForm({ onAdded }: Props) {
         <label>Author Name</label>
         <input
           type="text"
-          placeholder="e.g. Robert C. Martin"
+          placeholder="e.g."
           value={book.author}
           onChange={(e) =>
             updateField({ author: e.target.value })
