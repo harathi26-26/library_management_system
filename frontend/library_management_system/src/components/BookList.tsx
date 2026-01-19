@@ -11,59 +11,117 @@ export default function BookList({ onEdit, refreshKey }: Props) {
   const [books, setBooks] = useState<Book[]>([]);
   const [search, setSearch] = useState("");
   const [available, setAvailable] = useState("");
-  const [sort, setSort] = useState("");
+  const [sortBy, setSortBy] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{
+  type: "success" | "error";
+  text: string;
+} | null>(null);
 
   const loadBooks = async () => {
-    setLoading(true);
-    try {
-      const params: Record<string, string> = {};
+  setLoading(true);
+  try {
+    const params: Record<string, string> = {};
 
-      if (search) params.search = search;
-      if (available !== "") params.available = available;
+    // availability filter still backend-side
+    if (available !== "") params.available = available;
 
-      const res = await getBooks(params);
-      let data = res.data;
+    const res = await getBooks(params);
+    let data = res.data;
 
-      // 🔃 Sorting (frontend)
-      if (sort === "title") {
-        data = [...data].sort((a, b) =>
-          a.title.localeCompare(b.title)
+    // 🔍 FRONTEND SEARCH LOGIC (CONTROLLED)
+    if (search.trim()) {
+      const q = search.toLowerCase();
+
+      if (sortBy === "title") {
+        data = data.filter((b) =>
+          b.title.toLowerCase().includes(q)
         );
-      } else if (sort === "copies") {
-        data = [...data].sort(
-          (a, b) => b.available_copies - a.available_copies
+      } 
+      else if (sortBy === "author") {
+        data = data.filter((b) =>
+          b.author.toLowerCase().includes(q)
+        );
+      } 
+      else {
+        // default: search both
+        data = data.filter(
+          (b) =>
+            b.title.toLowerCase().includes(q) ||
+            b.author.toLowerCase().includes(q)
         );
       }
-
-      setBooks(data);
-    } catch (err) {
-      console.error("Failed to load books", err);
-    } finally {
-      setLoading(false);
     }
-  };
 
-  // 🔁 Reload when refreshKey changes
+    // 🔃 SORTING
+    if (sortBy === "title") {
+      data = [...data].sort((a, b) =>
+        a.title.localeCompare(b.title)
+      );
+    }
+
+    if (sortBy === "author") {
+      data = [...data].sort((a, b) =>
+        a.author.localeCompare(b.author)
+      );
+    }
+
+    setBooks(data);
+  } catch (err) {
+    console.error("Failed to load books", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+  // Reload when refreshKey changes
   useEffect(() => {
     loadBooks();
   }, [refreshKey]);
 
-  const handleDelete = async (id: number) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this book?"
-    );
-    if (!confirmDelete) return;
+const handleDelete = async (id: number) => {
+  setMessage(null);
 
+  if (!window.confirm("Are you sure you want to delete this book?")) return;
+
+  try {
     await deleteBook(id);
-    loadBooks(); // 🔁 auto refresh
-  };
+
+    setMessage({
+      type: "success",
+      text: "Book deleted successfully",
+    });
+
+    loadBooks();
+  } catch (err: any) {
+    setMessage({
+      type: "error",
+      text:
+        err?.response?.data?.detail ||
+        "Cannot delete book. It may be currently issued.",
+    });
+  }
+};
+
 
   return (
     <div className="book-list">
       <h2>📚 BOOK LIST</h2>
+      {message && (
+  <div
+    className={
+      message.type === "error"
+        ? "message-box error"
+        : "message-box success"
+    }
+  >
+    {message.text}
+  </div>
+)}
 
-      {/* 🔍 Search + Filter + Sort */}
+
+      {/* SEARCH + FILTER + SORT */}
       <div className="filter-bar">
         <input
           type="text"
@@ -81,21 +139,21 @@ export default function BookList({ onEdit, refreshKey }: Props) {
           <option value="false">Out of Stock</option>
         </select>
 
-        {/* <select value={sort} onChange={(e) => setSort(e.target.value)}>
+        {/* 🔽 SORT DROPDOWN */}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
           <option value="">No Sorting</option>
-          <option value="title">Sort by Title</option>
-          <option value="copies">Sort by Copies</option>
-        </select> */}
+          <option value="title"> Book Title</option>
+          <option value="author">Author</option>
+        </select>
 
-        <button onClick={loadBooks}>Apply</button>
+        <button onClick={loadBooks}>APPLY</button>
       </div>
 
-      {/* 📖 Book Items */}
       {loading && <p>Loading books...</p>}
-
-      {!loading && books.length === 0 && (
-        <p>No books found.</p>
-      )}
+      {!loading && books.length === 0 && <p>No books found.</p>}
 
       <ul>
         {books.map((b) => (
@@ -105,15 +163,27 @@ export default function BookList({ onEdit, refreshKey }: Props) {
                 <span className="book-id">ID: {b.id}</span>
                 <b>{b.title}</b>
               </div>
-
               <div className="book-meta">
                 Author: {b.author} | Copies: {b.available_copies}
               </div>
             </div>
 
             <div className="action-buttons">
-              <button type="button" className="btn-edit"onClick={() => onEdit(b)}>✏️ Edit</button>
-              <button type="button" className="btn-delete" onClick={() => handleDelete(b.id)}>❌ Delete</button>
+              <button
+                type="button"
+                className="btn-edit"
+                onClick={() => onEdit(b)}
+              >
+                ✏️ EDIT
+              </button>
+
+              <button
+                type="button"
+                className="btn-delete"
+                onClick={() => handleDelete(b.id)}
+              >
+                ❌ DELETE
+              </button>
             </div>
           </li>
         ))}

@@ -4,10 +4,8 @@ import type { Book } from "../types";
 import BookForm from "../components/BookForm";
 import UpdateBookForm from "../components/UpdateBookForm";
 import BookList from "../components/BookList";
-import IssueForm from "../components/IssueForm";
-import IssueHistory from "../components/IssueHistory";
 
-export default function Home() {
+export default function BooksPage() {
   const [editingBook, setEditingBook] = useState<Book | null>(null);
   const [refreshBooks, setRefreshBooks] = useState(0);
 
@@ -21,19 +19,12 @@ export default function Home() {
 
   return (
     <div className="container">
-
-      {/* ADD BOOK + ISSUE BOOK */}
-      <div className="two-column">
-        <div className="card">
-          <BookForm />
-        </div>
-
-        <div className="card">
-          <IssueForm />
-        </div>
+      {/* Add Book */}
+      <div className="card">
+        <BookForm onAdded={triggerRefresh} />
       </div>
 
-      {/* EDIT BOOK */}
+      {/* Edit Book */}
       {editingBook && (
         <div className="card">
           <UpdateBookForm
@@ -44,19 +35,13 @@ export default function Home() {
         </div>
       )}
 
-      {/* BOOK LIST */}
+      {/* Book List */}
       <div className="card book-list">
         <BookList
           refreshKey={refreshBooks}
           onEdit={(book) => setEditingBook(book)}
         />
       </div>
-
-      {/* ISSUE HISTORY */}
-      <div className="card issue-history">
-        <IssueHistory />
-      </div>
-
     </div>
   );
 }

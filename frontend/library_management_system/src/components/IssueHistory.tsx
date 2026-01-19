@@ -2,85 +2,140 @@ import { useEffect, useState } from "react";
 import { getIssues, returnBook } from "../api/api";
 import type { Issue } from "../types";
 
-export default function IssueHistory() {
+interface Props {
+  refreshKey: number;
+}
+
+const ITEMS_PER_PAGE = 10;
+
+export default function IssueHistory({ refreshKey }: Props) {
   const [issues, setIssues] = useState<Issue[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState(1);
+  const [filterBookId, setFilterBookId] = useState("");
 
-  // Load issue history
   const loadIssues = async () => {
-    setLoading(true);
-    try {
-      const res = await getIssues();
-      setIssues(res.data);
-    } catch (error) {
-      console.error("Error fetching issues:", error);
-      alert("Failed to load issue history");
-    } finally {
-      setLoading(false);
-    }
+    const res = await getIssues();
+    // latest first
+    setIssues(res.data.reverse());
+    setPage(1); // reset page after reload
   };
-
-  // Return book handler
-  const handleReturn = async (issueId: number) => {
-    try {
-      await returnBook(issueId);
-      alert("Book returned successfully");
-      loadIssues(); // refresh list
-    } catch (error) {
-      console.error("Return failed:", error);
-      alert("Failed to return book");
-    }
-  };
-
+  const handleReset = () => {
+    setFilterBookId("");
+    setPage(1);
+    loadIssues();
+  }
   useEffect(() => {
     loadIssues();
-  }, []);
+  }, [refreshKey]);
+
+  /* 🔍 FILTER LOGIC */
+  const filteredIssues = filterBookId
+    ? issues.filter(
+        (i) => i.book_id === Number(filterBookId)
+      )
+    : issues;
+
+  /* 📄 PAGINATION LOGIC */
+  const totalPages = Math.ceil(
+    filteredIssues.length / ITEMS_PER_PAGE
+  );
+
+  const start = (page - 1) * ITEMS_PER_PAGE;
+  const paginatedIssues = filteredIssues.slice(
+    start,
+    start + ITEMS_PER_PAGE
+  );
+
+  const handleReturn = async (id: number) => {
+    await returnBook(id);
+    loadIssues();
+  };
 
   return (
-    <div className="issue-history">
-      <h3>📕 ISSUE HISTORY</h3>
+    <div>
+      <h3>🕘 ISSUE HISTORY</h3>
 
-      {loading && <p>Loading...</p>}
+      {/*  FILTER BAR */}
+      <div className="filter-bar">
+        <input
+          type="number"
+          min="1"
+          placeholder="Filter by Book ID"
+          value={filterBookId}
+          onChange={(e) => {
+            setFilterBookId(e.target.value);
+            setPage(1); // reset page on filter change
+          }}
+        />
 
-      {!loading && issues.length === 0 && (
+        <button onClick={handleReset}>Reset</button>
+      </div>
+
+      {paginatedIssues.length === 0 && (
         <p>No issue records found.</p>
       )}
 
-      <ul>
-        {issues.map((i) => (
-          <li key={i.id}>
-            <div>
-              <div>
-                <strong>Book ID:</strong> {i.book_id}
-              </div>
-              <div>
-                <strong>Student:</strong> {i.student_name}
-              </div>
-              <div>
-                <strong>Status:</strong>{" "}
-                <span
-                  className={
-                    i.status === "Issued"
-                      ? "status-issued"
-                      : "status-returned"
-                  }
-                >
-                  {i.status}
-                </span>
-              </div>
-            </div>
+      {paginatedIssues.map((i, index) => {
+  const serialNo = (page - 1) * ITEMS_PER_PAGE + index + 1;
 
-            {i.status === "Issued" && (
-              <button
-                className="return-btn"
-                onClick={() => handleReturn(i.id)}
-              >
-                Return
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
+  return (
+    <div key={i.id} className="issue-card">
+      {/* SERIAL NUMBER */}
+      <div className="issue-number">{serialNo}</div>
+
+      {/* CONTENT */}
+      <div className="issue-details">
+        <p><b>Book ID:</b> {i.book_id}</p>
+        <p><b>Student:</b> {i.student_name}</p>
+        <p>
+          <b>Status:</b>{" "}
+          <span
+            className={
+              i.status === "Issued"
+                ? "status-issued"
+                : "status-returned"
+            }
+          >
+            {i.status}
+          </span>
+        </p>
+      </div>
+
+      {/* ACTION */}
+      {i.status === "Issued" && (
+        <button
+          className="return-btn"
+          onClick={() => handleReturn(i.id)}
+        >
+          Return
+        </button>
+      )}
+    </div>
+  );
+})}
+
+      {/* 📄 PAGINATION */}
+      {totalPages > 1 && (
+        <div className="pagination">
+          <button
+            disabled={page === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Prev
+          </button>
+
+          <span>
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            disabled={page === totalPages}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

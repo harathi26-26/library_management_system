@@ -2,73 +2,101 @@ import { useState } from "react";
 import { createBook } from "../api/api";
 import type { BookCreate } from "../types";
 
-export default function BookForm() {
+interface Props {
+  onAdded: () => void;
+}
+
+export default function BookForm({ onAdded }: Props) {
   const [book, setBook] = useState<BookCreate>({
     title: "",
     author: "",
     available_copies: 1,
   });
 
+  const [message, setMessage] = useState<{
+    text: string;
+    type: "success" | "error";
+  } | null>(null);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!book.title || !book.author) {
-      alert("Please fill all fields");
+    if (!book.title.trim() || !book.author.trim()) {
+      setMessage({
+        type: "error",
+        text: "Please fill all required fields.",
+      });
       return;
     }
 
-    await createBook(book);
-    alert("Book added successfully");
+    try {
+      await createBook(book);
+      onAdded();
 
-    setBook({ title: "", author: "", available_copies: 1 });
+      setMessage({
+        type: "success",
+        text: "Book added successfully.",
+      });
+
+      setBook({ title: "", author: "", available_copies: 1 });
+    } catch {
+      setMessage({
+        type: "error",
+        text: "Failed to add book. Please try again.",
+      });
+    }
+  };
+
+  const updateField = (field: Partial<BookCreate>) => {
+    setBook({ ...book, ...field });
+    setMessage(null);
   };
 
   return (
-    <form>
+    <form onSubmit={submit}>
       <div className="form-title">
         <h3>➕ ADD NEW BOOK</h3>
       </div>
 
-      {/* Book Title */}
+      {message && (
+        <div className={`message-box ${message.type}`}>
+          {message.text}
+        </div>
+      )}
+
       <div className="form-group">
         <label>Book Title</label>
         <input
           type="text"
-          placeholder="e.g., Clean Code"
           value={book.title}
-          onChange={(e) => setBook({ ...book, title: e.target.value })}
+          onChange={(e) => updateField({ title: e.target.value })}
         />
-
       </div>
 
-      {/* Author Name */}
       <div className="form-group">
         <label>Author Name</label>
         <input
           type="text"
-          placeholder="e.g., Robert C. Martin"
           value={book.author}
-          onChange={(e) => setBook({ ...book, author: e.target.value })}
+          onChange={(e) => updateField({ author: e.target.value })}
         />
       </div>
 
-      {/* Available Copies */}
       <div className="form-group">
         <label>Available Copies</label>
         <input
           type="number"
-          min="0"
+          min={0}
           value={book.available_copies}
           onChange={(e) =>
-            setBook({
-              ...book,
+            updateField({
               available_copies: Math.max(0, Number(e.target.value)),
             })
           }
         />
       </div>
 
-      <button onClick={submit}>Add Book</button>
+      <button type="submit">ADD BOOK</button>
     </form>
   );
 }

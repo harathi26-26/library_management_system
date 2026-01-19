@@ -1,59 +1,100 @@
-import { useState } from "react";
-import { issueBook } from "../api/api";
+import { useEffect, useState } from "react";
+import { issueBook, getBooks } from "../api/api";
+import type { Book } from "../types";
 
-export default function IssueForm() {
-  const [bookId, setBookId] = useState(1);
-  const [student, setStudent] = useState("");
+interface Props {
+  onIssued: () => void;
+}
 
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+export default function IssueForm({ onIssued }: Props) {
+  const [bookId, setBookId] = useState<number | "">("");
+  const [studentName, setStudentName] = useState("");
+  const [books, setBooks] = useState<Book[]>([]);
+  const [message, setMessage] = useState<{
+    text: string;
+    type: "error" | "success";
+  } | null>(null);
 
-    if (bookId <= 0 || !student.trim()) {
-      alert("Please provide valid details");
+  useEffect(() => {
+    getBooks().then((res) => setBooks(res.data));
+  }, []);
+
+  const handleIssue = async () => {
+    setMessage(null);
+
+    if (!bookId || !studentName.trim()) {
+      setMessage({
+        type: "error",
+        text: "Please enter Book ID and Student Name",
+      });
+      return;
+    }
+
+    const book = books.find((b) => b.id === Number(bookId));
+    if (!book) {
+      setMessage({
+        type: "error",
+        text: "Book ID does not exist",
+      });
+      return;
+    }
+
+    if (book.available_copies <= 0) {
+      setMessage({
+        type: "error",
+        text: "Book is out of stock",
+      });
       return;
     }
 
     await issueBook({
-      book_id: bookId,
-      student_name: student,
+      book_id: Number(bookId),
+      student_name: studentName.trim(),
     });
 
-    alert("Book issued successfully");
-    setBookId(1);
-    setStudent("");
+    setMessage({
+      type: "success",
+      text: "Book issued successfully",
+    });
+
+    setBookId("");
+    setStudentName("");
+
+    onIssued(); // ✅ notify parent
   };
 
   return (
-    <form>
-      <div className="form-title">
-        <h3>📕 ISSUE BOOK</h3>
-      </div>
+    <div>
+      <h3>📕 ISSUE BOOK</h3>
 
-      {/* Book ID */}
+      {message && (
+        <div className={`message-box ${message.type}`}>
+          {message.text}
+        </div>
+      )}
+
       <div className="form-group">
         <label>Book ID</label>
         <input
           type="number"
-          min="1"
+          min={1}
           value={bookId}
-          onChange={(e) =>
-            setBookId(Math.max(1, Number(e.target.value)))
-          }
+          onChange={(e) => setBookId(Number(e.target.value))}
         />
       </div>
 
-      {/* Student Name */}
       <div className="form-group">
         <label>Student Name</label>
         <input
           type="text"
-          placeholder="e.g.,"
-          value={student}
-          onChange={(e) => setStudent(e.target.value)}
+          value={studentName}
+          onChange={(e) => setStudentName(e.target.value)}
         />
       </div>
 
-      <button onClick={submit}>Issue Book</button>
-    </form>
+      <button type="button" onClick={handleIssue}>
+        ISSUE BOOK
+      </button>
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-
 .card {
   background: #ffffff;
   padding: 22px;
@@ -6,19 +5,17 @@
   border: 1px solid #dde1e6;
   margin-bottom: 30px;
 }
-
 /* forms */
 .form-group {
   margin-bottom: 14px;
 }
-
 .form-group label {
   display: block;
   font-size: 13px;
+  font-weight: bolder;
   margin-bottom: 6px;
   color: #555;
 }
-
 .form-group input,
 .filter-bar input,
 .filter-bar select {
@@ -32,20 +29,20 @@
 /* buttons */
 button {
   padding: 8px 18px;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: 5px;
   border-radius: 20px;             
   border: 1px solid transparent;
   cursor: pointer;
-  background: #9baae3;
-  color: #333;
+  background: #b2bce6;
+  color: #000000;
 }
-
 .btn-primary {
   background: #357edd;
   color: white;
   border-color: #357edd;
 }
-
 .btn-secondary {
   background: #f1f3f5;
   border-color: #ced4da;
@@ -56,8 +53,6 @@ button {
   list-style: none;
   padding: 0;
 }
-
-
 .book-list li {
   background: #f9fafb;
   border: 1px solid #e0e5ea;
@@ -75,7 +70,6 @@ button {
   align-items: center;
   gap: 12px;
 }
-
 .book-id {
   background: #357edd;
   color: white;
@@ -83,11 +77,12 @@ button {
   font-size: 11px;
   border-radius: 12px;
 }
-
 .book-meta {
   font-size: 12px;
-  color: #666;
+  color:#342e2e;
   margin-top: 6px;
+  font-weight: bold;
+
 }
 
 /* filter bar */
@@ -120,18 +115,84 @@ button {
   border-color: #d63031;
 }
 /* issue history of books */
-.issue-history ul {
-  list-style: none;
-  padding: 0;
+/* ================= ISSUE HISTORY ================= */
+
+.issue-card {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+
+  padding: 12px 16px;
+  margin-bottom: 12px;
+
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
 }
 
-.issue-history li {
-  background: #f9fafb;
-  border: 1px solid #e0e5ea;
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin-bottom: 14px;
+.issue-number {
+  font-weight: 600;
+  color: #2563eb;
+  font-size: 14px;
+  text-align: center;
+}
+.issue-details {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+
+
+/* Status colors */
+.status-issued {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.status-returned {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+
+/* Return button aligned right */
+.return-btn {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background-color: #111827;
+  color: #fff;
+  border: none;
+  cursor: pointer;
   font-size: 13px;
+}
+
+
+/* ================= PAGINATION ================= */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #cbd5f5;
+  background: #e0e7ff;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Status */
@@ -143,4 +204,29 @@ button {
 .status-returned {
   color: #27ae60;
   font-weight: 600;
+
 }
+.message-box {
+  padding: 10px 14px;
+  background-color: #ef8888;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: bolder;
+}
+
+.message-box.success {
+  background: #7cf97c;
+  color: #060906;
+  border: 1px solid #badbcc;
+}
+.message-box.error {
+  background-color: #f66868;
+  color: #ffffff;
+  border: 1px solid #fca5a5;
+}
+.issue-history {
+  max-width: 900px;
+  margin: auto;
+}
+
