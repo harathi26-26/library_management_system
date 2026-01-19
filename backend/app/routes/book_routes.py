@@ -18,6 +18,13 @@ def get_db():
 # ---------------- CREATE ----------------
 @router.post("/", response_model=BookResponse)
 def create_book(book: BookCreate, db: Session = Depends(get_db)):
+    existing_book = db.query(Book).filter(
+        Book.title.ilike(book.title.strip()),
+        Book.title.ilike(book.title.strip()),
+        Book.author.ilike(book.author.strip())
+    ).first()
+    if existing_book:
+        raise HTTPException(status_code=400, detail="this book already exist in the library")
     new_book = Book(**book.dict())
     db.add(new_book)
     db.commit()
